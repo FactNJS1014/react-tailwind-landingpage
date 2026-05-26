@@ -11,4 +11,33 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  base: "/",
+
+  build: {
+    chunkSizeWarningLimit: 1000,
+
+    rollupOptions: {
+      input: {
+        main: "./index.html",
+      },
+
+      output: {
+        manualChunks(id) {
+          if (id.includes("node_modules")) {
+            if (
+              id.includes("react") ||
+              id.includes("react-dom") ||
+              id.includes("react-router-dom")
+            ) {
+              return "vendor";
+            }
+
+            if (id.includes("recharts")) {
+              return "charts";
+            }
+          }
+        },
+      },
+    },
+  },
 });
